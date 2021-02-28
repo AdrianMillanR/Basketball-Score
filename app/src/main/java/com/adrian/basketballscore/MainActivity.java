@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void goFinalScore(){
         Intent intent= new Intent(this, FinalScoreActivity.class);
+        intent.putExtra(FinalScoreActivity.LOCAL_SCORE_KEY, localScore);
+        intent.putExtra(FinalScoreActivity.VISITANT_SCORE_KEY, visitantScore);
         startActivity(intent);
     }
 }
