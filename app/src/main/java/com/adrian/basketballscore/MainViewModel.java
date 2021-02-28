@@ -4,8 +4,15 @@ import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
 
-    public Integer localScore=0;
-    public Integer visitantScore=0;
+    private Integer localScore=0;
+    private Integer visitantScore=0;
+
+    public Integer getLocalScore(){
+        return localScore;
+    }
+    public  Integer getVisitantScore(){
+        return  visitantScore;
+    }
 
     public void resetScore(){
         localScore=0;
