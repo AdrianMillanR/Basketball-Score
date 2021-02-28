@@ -2,6 +2,7 @@ package com.adrian.basketballscore;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         binding.buttonRefresh.setOnClickListener(v -> {
             resetScore();
         });
+
+        binding.finalScoreButton.setOnClickListener(v -> {
+            goFinalScore();
+        });
     }
 
     private void plusScore(int numberPoints, TypeScore typescore){
@@ -94,5 +99,10 @@ public class MainActivity extends AppCompatActivity {
         visitantScore=0;
         binding.localScore.setText(localScore.toString());
         binding.visitantScore.setText(visitantScore.toString());
+    }
+
+    private void goFinalScore(){
+        Intent intent= new Intent(this, FinalScoreActivity.class);
+        startActivity(intent);
     }
 }
