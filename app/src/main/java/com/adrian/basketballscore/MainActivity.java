@@ -1,6 +1,7 @@
 package com.adrian.basketballscore;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
         LOCAL, VISITANT
     }
 
-    private Integer localScore=0;
-    private Integer visitantScore=0;
+
     private ActivityMainBinding binding;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,38 +25,48 @@ public class MainActivity extends AppCompatActivity {
         binding= ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.localScore.setText(localScore.toString());
-        binding.visitantScore.setText(visitantScore.toString());
+        viewModel= new ViewModelProvider(this).get(MainViewModel.class);
+
+        binding.localScore.setText(viewModel.localScore.toString());
+        binding.visitantScore.setText(viewModel.visitantScore.toString());
 
         events();
     }
 
     private void events(){
         binding.localPlusOne.setOnClickListener(v -> {
-            plusScore(1,TypeScore.LOCAL);
+            viewModel.plusScore(1,TypeScore.LOCAL);
+            binding.localScore.setText(viewModel.localScore.toString());
         });
 
         binding.localPlusTwo.setOnClickListener(v -> {
-            plusScore(2,TypeScore.LOCAL);
+            viewModel.plusScore(2,TypeScore.LOCAL);
+            binding.localScore.setText(viewModel.localScore.toString());
         });
 
         binding.visitantPlusOne.setOnClickListener(v -> {
-            plusScore(1,TypeScore.VISITANT);
+            viewModel.plusScore(1,TypeScore.VISITANT);
+            binding.visitantScore.setText(viewModel.visitantScore.toString());
         });
 
         binding.visitantPlusTwo.setOnClickListener(v -> {
-            plusScore(2,TypeScore.VISITANT);
+            viewModel.plusScore(2,TypeScore.VISITANT);
+            binding.visitantScore.setText(viewModel.visitantScore.toString());
         });
 
         binding.localMinusOne.setOnClickListener(v -> {
-            minusScore(1,TypeScore.LOCAL);
+            viewModel.minusScore(1,TypeScore.LOCAL);
+            binding.localScore.setText(viewModel.localScore.toString());
         });
         binding.visitantMinusOne.setOnClickListener(v -> {
-            minusScore(1,TypeScore.VISITANT);
+            viewModel.minusScore(1,TypeScore.VISITANT);
+            binding.visitantScore.setText(viewModel.visitantScore.toString());
         });
 
         binding.buttonRefresh.setOnClickListener(v -> {
-            resetScore();
+            viewModel.resetScore();
+            binding.localScore.setText(viewModel.localScore.toString());
+            binding.visitantScore.setText(viewModel.visitantScore.toString());
         });
 
         binding.finalScoreButton.setOnClickListener(v -> {
@@ -63,48 +74,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void plusScore(int numberPoints, TypeScore typescore){
-        switch (typescore){
-            case VISITANT:
-                visitantScore+=numberPoints;
-                binding.visitantScore.setText(visitantScore.toString());
-                break;
-            case LOCAL:
-                localScore+=numberPoints;
-                binding.localScore.setText(localScore.toString());
-                break;
-        }
-    }
-
-    private void minusScore(int numberPoints, TypeScore typescore){
-        switch (typescore){
-            case VISITANT:
-                if(visitantScore>0){
-                    visitantScore-=numberPoints;
-                    binding.visitantScore.setText(visitantScore.toString());
-                }
-                break;
-            case LOCAL:
-                if(localScore>0){
-                    localScore-=numberPoints;
-                    binding.localScore.setText(localScore.toString());
-                }
-                break;
-
-        }
-    }
-
-    private void resetScore(){
-        localScore=0;
-        visitantScore=0;
-        binding.localScore.setText(localScore.toString());
-        binding.visitantScore.setText(visitantScore.toString());
-    }
-
     private void goFinalScore(){
         Intent intent= new Intent(this, FinalScoreActivity.class);
-        intent.putExtra(FinalScoreActivity.LOCAL_SCORE_KEY, localScore);
-        intent.putExtra(FinalScoreActivity.VISITANT_SCORE_KEY, visitantScore);
+        intent.putExtra(FinalScoreActivity.LOCAL_SCORE_KEY, viewModel.localScore);
+        intent.putExtra(FinalScoreActivity.VISITANT_SCORE_KEY, viewModel.visitantScore);
         startActivity(intent);
     }
 }
